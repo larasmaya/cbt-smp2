@@ -48,7 +48,11 @@ class MatpelImport implements ToCollection, WithStartRow
 
         $real = array_map(function($item) use ($agamas, $jurusans) {
             if ($item['agama_id'] !== 0) {
-                $item['agama_id'] = $agamas->firstWhere('kode',$item['agama_id'])->id;
+                $agama = $agamas->firstWhere('kode',$item['agama_id']);
+                if (is_null($agama)) {
+                    throw new Exception('agama dengan kode :'.$item['agama_id'].' tidak ditemukan, silakan cek menu agama');
+                }
+                $item['agama_id'] = $agama->id;
             }
             if ($item['jurusan_id'] !== 0) {
                 $real_jurusan = [];

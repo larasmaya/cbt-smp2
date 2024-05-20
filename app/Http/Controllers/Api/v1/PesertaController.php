@@ -31,6 +31,7 @@ class PesertaController extends Controller
             $perPage = 30;
         }
         $peserta = DB::table('pesertas as t_0')
+            ->distinct()
             ->join('agamas as t_1','t_0.agama_id','=','t_1.id')
             ->join('jurusans as t_2','t_0.jurusan_id','=','t_2.id')
             ->select([
@@ -43,10 +44,19 @@ class PesertaController extends Controller
                 't_0.block_reason',
                 't_0.antiblock',
                 't_1.nama as agama',
-                't_2.nama as jurusan'
+                't_2.nama as jurusan',
+                't_0.created_at'
             ]);
         if (request()->q != '') {
             $peserta = $peserta->where('t_0.nama', 'LIKE', '%'.request()->q.'%')->orWhere('t_0.no_ujian', '=',request()->q);
+        }
+        if (request()->jurusanId != '') {
+            $peserta = $peserta->where('t_0.jurusan_id', request()->jurusanId);
+        }
+        if (request()->groupId != '') {
+            $peserta = $peserta
+                ->join('group_members as t_3', 't_3.student_id', '=', 't_0.id')
+                ->where('t_3.group_id', request()->groupId);
         }
 
         $peserta = $peserta

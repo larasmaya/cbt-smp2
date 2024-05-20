@@ -40,8 +40,19 @@ class PesertaImport implements ToCollection, WithStartRow
         $final = $pesertas;
         foreach($pesertas as $key => $value) {
             $final[$key]['id'] = Str::uuid()->toString();
-            $final[$key]['jurusan_id'] = $jurusan_kodes->where('kode', $value['jurusan_id'])->first()->id;
-            $final[$key]['agama_id'] = $agama_kodes->where('kode', $value['agama_id'])->first()->id;
+
+            $jurusan = $jurusan_kodes->where('kode', $value['jurusan_id'])->first();
+            if (is_null($jurusan)) {
+                throw new Exception("jurusan dengan kode: ".$value['jurusan_id']." tidak ditemukan");
+            }
+            $final[$key]['jurusan_id'] = $jurusan->id;
+
+            $agama = $agama_kodes->where('kode', $value['agama_id'])->first();
+            if (is_null($agama)) {
+                throw new Exception("agama dengan kode: ".$value['agama_id']." tidak ditemukan");
+            }
+
+            $final[$key]['agama_id'] = $agama->id;
             $final[$key]['created_at'] = now()->addSeconds($key);
             $final[$key]['updated_at'] = now()->addSeconds($key);
         }
