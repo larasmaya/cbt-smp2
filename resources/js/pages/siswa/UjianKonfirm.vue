@@ -39,15 +39,21 @@
 			    </div>
           <form @submit.prevent="ujianStart" v-if="jadwal && jadwal.length > 0">
             <template v-if="jadwalAllowEnter.length > 0">
-              <div class="mb-4">
+              <div class="mb-2">
                 <label for="" class="text-xs font-semibold text-gray-500 px-1">Jadwal Ujian</label>
                 <div class="">
                   <div class="w-full">
-                    <select v-model="data.jadwal_id" @change="checkToken()" class="text-gray-700 w-full pl-4 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-blue-300" :readonly="isLoading" :class="{'bg-gray-50' : isLoading}">
-                      <option :value="jad.id" v-for="jad in jadwalAllowEnter" :key="jad.id">
-                        {{ jad.alias }}
-                      </option>
-                    </select>
+                    <div class="px-2 border-2 border-gray-200 rounded-lg p-1 mb-1" v-for="jad in jadwalAllowEnter" :key="jad.id">
+                      <div class="flex">
+                        <div class="flex items-center h-5 mr-2">
+                            <input :id="'helper-radio-'+jad.id" v-model="data.jadwal_id" @change="checkToken()" aria-describedby="helper-radio-text" type="radio" :value="jad.id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+                        <div class="ms-2 text-sm">
+                            <label for="helper-radio" class="font-medium text-gray-900 dark:text-gray-300">{{ jad.alias }}</label>
+                            <p :id="'helper-radio-'+jad.id" class="text-xs font-normal text-gray-500 dark:text-gray-300">{{ jad.tanggal }} {{ jad.mulai}}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
