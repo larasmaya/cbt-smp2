@@ -59,6 +59,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
         Route::post('pesertas/delete-multiple', 'PesertaController@destroyMultiple');
         Route::get('pesertas/status-blocked', 'PesertaController@blocked');
         Route::delete('pesertas/unblock', 'PesertaController@unblock');
+        Route::post('pesertas/regenerate-password', 'PesertaController@regeneratePassword');
         Route::apiResource('pesertas', 'PesertaController');
 
         Route::get('matpels/all', 'MatpelController@allData');

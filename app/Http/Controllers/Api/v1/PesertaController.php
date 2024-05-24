@@ -335,4 +335,27 @@ class PesertaController extends Controller
         DB::table("siswa_ujians")->whereIn("peserta_id", $pesertas)->update(['out_ujian_counter' => 0]);
         return SendResponse::accept();
     }
+
+    /**
+     * @route(path="api/v1/pesertas/regenerate-password", methods={"POST"})
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function regeneratePassword(Request $request)
+    {
+        $request->validate([
+            'peserta_id'    => 'required|array'
+        ]);
+
+        $pesertaIds = $request->get('peserta_id');
+        $pesertas = DB::table('pesertas')->whereIn('id', $pesertaIds)->get();
+
+        foreach($pesertas as $peserta) {
+            DB::table('pesertas')->where('id', $peserta->id)->update([
+                'password' => strtoupper(\Illuminate\Support\Str::random(6))
+            ]);
+        }
+
+        return SendResponse::accept();
+    }
 }
